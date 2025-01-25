@@ -1,0 +1,9 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* Remove default margin */
+* {
+    font-family: 'sans-serif', 'Roboto';
+    margin: 0;
+}
