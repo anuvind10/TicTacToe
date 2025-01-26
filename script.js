@@ -115,7 +115,7 @@ const GameControl = (function() {
 
 })();
 
-const displayController = (function() {
+const DisplayController = (function() {
     const board = Gameboard.getBoard();
     let field;
 
