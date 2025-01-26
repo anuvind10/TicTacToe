@@ -63,14 +63,25 @@ const GameControl = (function() {
         currentPlayer = player1;
         currentSign = player1.getSign();
         gameBoardFields.forEach((field) => field.addEventListener('click', markField))
-
+        DisplayController.displayTurn(currentPlayer);
     }
 
     function markField() {
         const fieldID = this.getAttribute('data-field-id').split('-')[1];
 
         Gameboard.setField(fieldID, currentSign);
-        displayController.displayBoard();
+        DisplayController.displayBoard();
+        
+        if (currentPlayer === player1) {
+            currentPlayer = player2;
+            currentSign = player2.getSign();
+        }
+        else {
+            currentPlayer = player1;
+            currentSign = player1.getSign();
+        }
+
+        DisplayController.displayTurn(currentPlayer)
     }
 
     function initPlayers() {
@@ -117,6 +128,8 @@ const GameControl = (function() {
 
 const DisplayController = (function() {
     const board = Gameboard.getBoard();
+    const turnDisplay = document.querySelector('#playerTurn');
+
     let field;
 
     function displayBoard() {
@@ -125,9 +138,20 @@ const DisplayController = (function() {
             field.textContent = board[i];
         }
     }
+
+    function displayTurn(player) {
+        turnDisplay.textContent = `Turn: ${player.getName()}`;
+
+    }
+
+    function displayScore() {
+
+    }
     
     return {
-        displayBoard
+        displayBoard,
+        displayTurn,
+        displayScore
     }
 
 })();
