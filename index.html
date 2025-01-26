@@ -4,36 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tac Toe</title>
-    <script src="./script.js"></script>
+    <script defer src="./script.js"></script>
     <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
     <header></header>
     <main>
         <div id="playerDetails">
-            <div id="playerName" class="playerDetail">
-                <p>Your Name: </p>
-                <input type="text" name="playerName" id="playerName">
+            <div id="player1Details" class="playerDetail">
+                <p>Player1 Name: </p>
+                <input type="text" name="player1Name" id="player1Name">
+            </div>
+            <div id="player2Details" class="playerDetail">
+                <p>Player2 Name: </p>
+                <input type="text" name="player2Name" id="player2Name">
             </div>
             <div id="playerSign" class="playerDetail">
-                <p>Your Sign: </p>
-                <button class="btn">X</button>
-                <button class="btn">Y</button>
+                <p>Player1 Sign: </p>
+                <button id="signX" class="btn signBtn">X</button>
+                <button id="signO" class="btn signBtn">O</button>
             </div>
         </div>
         <div id="startGame">
             <button id="startButton" class="btn">Start Game</button>
         </div>
         <div id="gameBoard">
-            <div class="gameBoardField" data-field-id = "field1"></div>
-            <div class="gameBoardField" data-field-id = "field2"></div>
-            <div class="gameBoardField" data-field-id = "field3"></div>
-            <div class="gameBoardField" data-field-id = "field4"></div>
-            <div class="gameBoardField" data-field-id = "field5"></div>
-            <div class="gameBoardField" data-field-id = "field6"></div>
-            <div class="gameBoardField" data-field-id = "field7"></div>
-            <div class="gameBoardField" data-field-id = "field8"></div>
-            <div class="gameBoardField" data-field-id = "field9"></div>
+            <div id="field-0" class="gameBoardField" data-field-id = "field-0"></div>
+            <div id="field-1" class="gameBoardField" data-field-id = "field-1"></div>
+            <div id="field-2" class="gameBoardField" data-field-id = "field-2"></div>
+            <div id="field-3" class="gameBoardField" data-field-id = "field-3"></div>
+            <div id="field-4" class="gameBoardField" data-field-id = "field-4"></div>
+            <div id="field-5" class="gameBoardField" data-field-id = "field-5"></div>
+            <div id="field-6" class="gameBoardField" data-field-id = "field-6"></div>
+            <div id="field-7" class="gameBoardField" data-field-id = "field-7"></div>
+            <div id="field-8" class="gameBoardField" data-field-id = "field-8"></div>
         </div>
     </main>
     <footer></footer>

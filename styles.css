@@ -63,3 +63,14 @@ main {
 input {
     color: black;
 }
+
+.signBtn.selected {
+    box-shadow: 2px 2px 2px white;
+}
+
+.gameBoardField {
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

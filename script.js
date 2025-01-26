@@ -7,7 +7,7 @@ const Gameboard = (function() {
     }
 
     function getBoard() {
-        console.log(board);
+        return board;
     }
 
     function resetField() {
@@ -40,27 +40,95 @@ function Player(name, sign) {
 }
 
 // GameControl Object to control the flow of the game
-
-// Make this an IIFE
 const GameControl = (function() {
-    let name = prompt('First Player Name: ');
-    let sign = prompt('Which sign do you choose? (X/O): ');
+    const startGame = document.querySelector('#startButton');
+    const signs = document.querySelectorAll('.signBtn');
+    const gameBoardFields = document.querySelectorAll('.gameBoardField')
+    const player1Name = document.querySelector('#player1Name');
+    const player2Name = document.querySelector('#player2Name');
+    let player1Sign;
+    let player2Sign;
+    let player1;
+    let player2;    
+    let currentPlayer;
 
-    const player1 = new Player(name, sign);
+    signs.forEach(sign => {
+        sign.addEventListener('click', toggleSelected)
+    });
 
-    name = prompt('Second Player Name: ');
-    if (sign == 'X') {
-        const player2 = new Player(name, 'Y');
+    startGame.addEventListener('click', initGame)
+
+    function initGame() {
+        initPlayers();
+        currentPlayer = player1;
+        currentSign = player1.getSign();
+        gameBoardFields.forEach((field) => field.addEventListener('click', markField))
+
     }
-    else {
-        const player2 = new player1(name, 'X');
+
+    function markField() {
+        const fieldID = this.getAttribute('data-field-id').split('-')[1];
+
+        Gameboard.setField(fieldID, currentSign);
+        displayController.displayBoard();
     }
 
-    console.log("Game Starts Now!");
+    function initPlayers() {
+        signs.forEach(sign => {
+            if (sign.classList.contains('selected')) {
+                player1Sign = sign.textContent
+                return;
+            }
+        });
 
-    let index = prompt('Player 1, choose your index: ');
+        if (player1Sign === 'X') {
+            player2Sign = 'O';
+        }
+        else {
+            player2Sign = 'X';
+        }
 
-    Gameboard.setField(index, player1.getSign());
-    Gameboard.getBoard();
-});
+        player1 = new Player(player1Name.value, player1Sign);
+        player2 = new Player(player2Name.value, player2Sign);
+    }
+
+    function toggleSelected() {
+        const isSelected = this.classList.contains('selected');
+        let unselect;
+
+        if (this.id === 'signX') {
+            unselect = document.querySelector('#signO');
+        }
+        else {
+            unselect = document.querySelector('#signX');
+        }
+
+        if (!isSelected) {
+            this.classList.add('selected');
+        }
+
+        if (unselect.classList.contains('selected')) {
+            unselect.classList.remove('selected');
+        }
+        
+    }
+
+})();
+
+const displayController = (function() {
+    const board = Gameboard.getBoard();
+    let field;
+
+    function displayBoard() {
+        for(let i = 0; i < board.length; i++) {
+            field = document.getElementById('field-'+i);
+            field.textContent = board[i];
+        }
+    }
+    
+    return {
+        displayBoard
+    }
+
+})();
 
