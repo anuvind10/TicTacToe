@@ -1,4 +1,4 @@
-// Gameboard object that updates the actual board
+// Gameboard object
 const Gameboard = (function() {
     let board = ['','','','','','','','',''];
 
@@ -10,6 +10,10 @@ const Gameboard = (function() {
         return board;
     }
 
+    function getField(index) {
+        return board[index];
+    }
+
     function resetField() {
         for (let i = 0; i < board.length; i++) {
             board[i] = "";
@@ -19,7 +23,8 @@ const Gameboard = (function() {
     return {
         setField,
         resetField,
-        getBoard
+        getBoard,
+        getField
     }
 })();
 
@@ -39,7 +44,7 @@ function Player(name, sign) {
 
 }
 
-// GameControl Object to control the flow of the game
+// Controls the flow of the game
 const GameControl = (function() {
     const startGame = document.querySelector('#startButton');
     const signs = document.querySelectorAll('.signBtn');
@@ -54,6 +59,8 @@ const GameControl = (function() {
     let player1Score = 0;
     let player2Score = 0;
     let draw = 0;
+    let round = 0;
+    let winnerFound = false;
 
     signs.forEach(sign => {
         sign.addEventListener('click', toggleSelected)
@@ -62,6 +69,7 @@ const GameControl = (function() {
     startGame.addEventListener('click', initGame)
 
     function initGame() {
+        round++;
         initPlayers();
         currentPlayer = player1;
         currentSign = player1.getSign();
@@ -75,6 +83,12 @@ const GameControl = (function() {
 
         Gameboard.setField(fieldID, currentSign);
         DisplayController.displayBoard();
+        checkForWinner(parseInt(fieldID));
+        
+        if(winnerFound) {
+            console.log(`Winner is ${currentPlayer.getName()}`)
+        }
+        DisplayController.displayScore(player1Score, player2Score, draw)
         
         if (currentPlayer === player1) {
             currentPlayer = player2;
@@ -86,7 +100,8 @@ const GameControl = (function() {
         }
 
         DisplayController.displayTurn(currentPlayer)
-        DisplayController.displayScore(player1Score, player2Score, draw)
+
+        
     }
 
     function initPlayers() {
@@ -129,8 +144,35 @@ const GameControl = (function() {
         
     }
 
+    function checkForWinner(index) {
+        const winningCombo = [
+            [0,1,2],
+            [3,4,5],
+            [6,7,8],
+            [0,3,6],
+            [1,4,7],
+            [2,5,8],
+            [0,4,8],
+            [2,4,6]
+        ];
+
+        function winnerTrigger(provenPossibilitiy) {
+            if(provenPossibilitiy.every((index) => Gameboard.getField(index) === currentPlayer.getSign())) {
+                winnerFound = true;
+                // Set class to highlight the winning row
+            }
+        }
+
+        return winningCombo.filter((combination) => combination.includes(index))
+                .some((possibleCombos) => possibleCombos.every((index) => 
+                        Gameboard.getField(index) === currentPlayer.getSign() ? winnerTrigger(possibleCombos) : false )
+                    )
+        
+    }
+
 })();
 
+// Controls the display
 const DisplayController = (function() {
     const board = Gameboard.getBoard();
     const turnDisplay = document.querySelector('#playerTurn');
