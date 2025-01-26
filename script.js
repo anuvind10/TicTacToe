@@ -30,16 +30,21 @@ const Gameboard = (function() {
 
 
 // Player Object
-function Player(name, sign) {
+function Player(name, sign, score) {
     const playerName = name;
     const playerSign = sign;
+    let playerScore = score;
 
-    const getName = () => {return name};
-    const getSign = () => {return sign};
+    const getName = () => playerName;
+    const getSign = () => playerSign;
+    const getScore = () => playerScore;
+    const updateScore = () => playerScore++;
 
     return {
         getName,
-        getSign
+        getSign,
+        getScore,
+        updateScore
     }
 
 }
@@ -56,8 +61,6 @@ const GameControl = (function() {
     let player1;
     let player2;    
     let currentPlayer;
-    let player1Score = 0;
-    let player2Score = 0;
     let draw = 0;
     let round = 0;
     let winnerFound = false;
@@ -75,7 +78,7 @@ const GameControl = (function() {
         currentSign = player1.getSign();
         gameBoardFields.forEach((field) => field.addEventListener('click', markField))
         DisplayController.displayTurn(currentPlayer);
-        DisplayController.displayScore(player1Score, player2Score, draw)
+        DisplayController.displayScore(player1.getScore(), player2.getScore(), draw)
     }
 
     function markField() {
@@ -87,8 +90,34 @@ const GameControl = (function() {
         
         if(winnerFound) {
             console.log(`Winner is ${currentPlayer.getName()}`)
+            if (currentPlayer == player1) {
+                player1.updateScore();
+            }
+            else {
+                player2.updateScore();
+            }
+            round++;
+        } else if (!Gameboard.getBoard().includes('')) {
+            console.log('Its a Draw')
+            draw++
+            round++;
         }
-        DisplayController.displayScore(player1Score, player2Score, draw)
+
+        DisplayController.displayScore(player1.getScore(), player2.getScore(), draw)
+        if(round == 3) {
+            if (player1.getScore() > player2.getScore()) {
+                console.log(`${player1.getName()} Wins`)
+            }
+            else if (player2.getScore() > player1.getScore()) {
+                console.log(`${player2.getName()} Wins`)
+            }
+            else {
+                console.log('Its a draw');
+            }
+            console.log('Game Ends!')
+
+            return;
+        }
         
         if (currentPlayer === player1) {
             currentPlayer = player2;
@@ -119,8 +148,8 @@ const GameControl = (function() {
             player2Sign = 'X';
         }
 
-        player1 = new Player(player1Name.value, player1Sign);
-        player2 = new Player(player2Name.value, player2Sign);
+        player1 = new Player(player1Name.value, player1Sign, 0);
+        player2 = new Player(player2Name.value, player2Sign, 0);
     }
 
     function toggleSelected() {
