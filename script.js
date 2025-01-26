@@ -51,6 +51,9 @@ const GameControl = (function() {
     let player1;
     let player2;    
     let currentPlayer;
+    let player1Score = 0;
+    let player2Score = 0;
+    let draw = 0;
 
     signs.forEach(sign => {
         sign.addEventListener('click', toggleSelected)
@@ -64,6 +67,7 @@ const GameControl = (function() {
         currentSign = player1.getSign();
         gameBoardFields.forEach((field) => field.addEventListener('click', markField))
         DisplayController.displayTurn(currentPlayer);
+        DisplayController.displayScore(player1Score, player2Score, draw)
     }
 
     function markField() {
@@ -82,6 +86,7 @@ const GameControl = (function() {
         }
 
         DisplayController.displayTurn(currentPlayer)
+        DisplayController.displayScore(player1Score, player2Score, draw)
     }
 
     function initPlayers() {
@@ -129,6 +134,9 @@ const GameControl = (function() {
 const DisplayController = (function() {
     const board = Gameboard.getBoard();
     const turnDisplay = document.querySelector('#playerTurn');
+    const p1ScoreDisplay = document.querySelector('#player1Score')
+    const p2ScoreDisplay = document.querySelector('#player2Score')
+    const drawScoreDisplay = document.querySelector('#drawScore')
 
     let field;
 
@@ -144,8 +152,10 @@ const DisplayController = (function() {
 
     }
 
-    function displayScore() {
-
+    function displayScore(player1Score, player2Score, draw) {
+        p1ScoreDisplay.textContent = player1Score;
+        p2ScoreDisplay.textContent = player2Score;
+        drawScoreDisplay.textContent = draw;
     }
     
     return {
