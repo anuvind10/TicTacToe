@@ -5,6 +5,61 @@
 /* Remove default margin */
 * {
     font-family: 'sans-serif', 'Roboto';
+    color: var(--font-color);
     margin: 0;
 }
 
+:root {
+    --bg-color1: #000000;
+    --bg-color2: #1f1f1f;
+    --bg-color3: #575757;
+    --font-color: white;
+    --theme-color: #c159fd;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--bg-color1);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#gameBoard {
+    max-width: 300px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 2px;
+}
+
+.gameBoardField {
+    width: 100px;
+    height: 100px;
+    border: 1px solid white;
+}
+
+#playerDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 10px
+}
+
+.playerDetail {
+    display: flex;
+    gap: 10px
+}
+
+.btn {
+    color: black;
+}
+
+input {
+    color: black;
+}
