@@ -74,6 +74,7 @@ const GameControl = (function() {
     function initGame() {
         round++;
         initPlayers();
+        toggleGamePage();
         currentPlayer = player1;
         currentSign = player1.getSign();
         gameBoardFields.forEach((field) => field.addEventListener('click', markField))
@@ -177,6 +178,22 @@ const GameControl = (function() {
             unselect.classList.remove('selected');
         }
         
+    }
+
+    function toggleGamePage() {
+        const gamePage = document.querySelector('#gamePage');
+        const setupPage = document.querySelector('#setupPage');
+        const isGamePageActive = gamePage.classList.contains('active');
+
+        if (!isGamePageActive) {
+            gamePage.classList.add('active');
+            setupPage.classList.remove('active');
+        }
+        else {
+            gamePage.classList.remove('active');
+            setupPage.classList.add('active');
+        }
+
     }
 
     function checkForWinner(index) {

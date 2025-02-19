@@ -25,12 +25,6 @@ body {
     background-color: var(--bg-color1);
 }
 
-main {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
 #gameBoard {
     max-width: 300px;
     display: grid;
@@ -91,4 +85,21 @@ input {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+#setupPage,
+#gamePage {
+    display: none;
+}
+
+#setupPage.active {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#gamePage.active {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
