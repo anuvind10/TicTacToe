@@ -14,7 +14,7 @@ const Gameboard = (function() {
         return board[index];
     }
 
-    function resetField() {
+    function resetBoard() {
         for (let i = 0; i < board.length; i++) {
             board[i] = "";
         }
@@ -22,7 +22,7 @@ const Gameboard = (function() {
 
     return {
         setField,
-        resetField,
+        resetBoard,
         getBoard,
         getField
     }
@@ -97,14 +97,20 @@ const GameControl = (function() {
                 player2.updateScore();
             }
             round++;
+            Gameboard.resetBoard();
+            winnerFound = false;
         } else if (!Gameboard.getBoard().includes('')) {
             console.log('Its a Draw')
             draw++
             round++;
+            Gameboard.resetBoard();
+            winnerFound = false;
         }
 
+        DisplayController.displayBoard();
         DisplayController.displayScore(player1.getScore(), player2.getScore(), draw)
-        if(round == 3) {
+        console.log(round);
+        if(round > 3) {
             if (player1.getScore() > player2.getScore()) {
                 console.log(`${player1.getName()} Wins`)
             }
