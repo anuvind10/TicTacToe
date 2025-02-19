@@ -64,16 +64,24 @@ const GameControl = (function() {
     let draw = 0;
     let round = 0;
     let winnerFound = false;
+    let message = '';
 
     signs.forEach(sign => {
         sign.addEventListener('click', toggleSelected)
     });
 
-    startGame.addEventListener('click', initGame)
+    startGame.addEventListener('click', (event) => {
+        event.preventDefault();
+        initGame()
+    })
 
     function initGame() {
+        message = initPlayers();
+        if (message !== '') {
+            console.log(message)
+            return
+        }
         round++;
-        initPlayers();
         toggleGamePage();
         currentPlayer = player1;
         currentSign = player1.getSign();
@@ -141,6 +149,10 @@ const GameControl = (function() {
     }
 
     function initPlayers() {
+        if (player1Name.value === '' || player2Name.value === '') {
+            return player1Name.value === '' ? 'Player1 must have a name' : 'Player2 must have a name'
+        }
+
         signs.forEach(sign => {
             if (sign.classList.contains('selected')) {
                 player1Sign = sign.textContent
@@ -148,15 +160,22 @@ const GameControl = (function() {
             }
         });
 
-        if (player1Sign === 'X') {
-            player2Sign = 'O';
+        if (!player1Sign) {
+            return 'You must choose a sign'
         }
         else {
-            player2Sign = 'X';
+            if (player1Sign === 'X') {
+                player2Sign = 'O';
+            }
+            else {
+                player2Sign = 'X';
+            }
         }
 
         player1 = new Player(player1Name.value, player1Sign, 0);
         player2 = new Player(player2Name.value, player2Sign, 0);
+
+        return ''
     }
 
     function toggleSelected() {

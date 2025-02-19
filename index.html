@@ -10,19 +10,19 @@
 <body>
     <header></header>
     <main>
-        <div id="setupPage" class="active">
+        <form action="" id="setupPage" class="active">
             <div id="playerDetails">
                 <div id="player1Details" class="playerDetail">
                     <p>Player1 Name: </p>
-                    <input type="text" name="player1Name" id="player1Name">
+                    <input type="text" name="player1Name" id="player1Name" required>
                 </div>
                 <div id="player2Details" class="playerDetail">
                     <p>Player2 Name: </p>
-                    <input type="text" name="player2Name" id="player2Name">
+                    <input type="text" name="player2Name" id="player2Name" required>
                 </div>
                 <div id="playerSign" class="playerDetail">
                     <p>Player1 Sign: </p>
-                    <button id="signX" class="btn signBtn">X</button>
+                    <button id="signX" class="btn signBtn selected">X</button>
                     <button id="signO" class="btn signBtn">O</button>
                 </div>
             </div>
@@ -32,7 +32,7 @@
             <div id="turnDisplay">
                 <p id="playerTurn" class="turn"></p>
             </div>
-        </div>
+        </form>
         <div id="gamePage">
             <div id="gameBoard">
                 <div id="field-0" class="gameBoardField" data-field-id = "field-0"></div>
