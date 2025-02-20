@@ -54,8 +54,10 @@ const GameControl = (function() {
     const startGame = document.querySelector('#startButton');
     const signs = document.querySelectorAll('.signBtn');
     const gameBoardFields = document.querySelectorAll('.gameBoardField')
-    const player1Name = document.querySelector('#player1Name');
-    const player2Name = document.querySelector('#player2Name');
+    const player1Name = document.querySelector('#player1');
+    const player2Name = document.querySelector('#player2');
+    const nameInputs = document.querySelectorAll('.nameInput');
+
     let player1Sign;
     let player2Sign;
     let player1;
@@ -64,7 +66,7 @@ const GameControl = (function() {
     let draw = 0;
     let round = 0;
     let winnerFound = false;
-    let message = '';
+    let result;
 
     signs.forEach(sign => {
         sign.addEventListener('click', toggleSelected)
@@ -75,10 +77,14 @@ const GameControl = (function() {
         initGame()
     })
 
+    nameInputs.forEach(name => {
+        name.addEventListener('keyup', toggleValidInput)        
+    });
+
     function initGame() {
-        message = initPlayers();
-        if (message !== '') {
-            console.log(message)
+        result = initPlayers();
+        if (result !== 0) {
+            toggleShake();
             return
         }
         round++;
@@ -149,8 +155,9 @@ const GameControl = (function() {
     }
 
     function initPlayers() {
-        if (player1Name.value === '' || player2Name.value === '') {
-            return player1Name.value === '' ? 'Player1 must have a name' : 'Player2 must have a name'
+        if ((player1Name.value === '' && player2Name.value === '') || 
+            (player1Name.value === '' || player2Name.value === '')) {
+                return 1
         }
 
         signs.forEach(sign => {
@@ -160,22 +167,12 @@ const GameControl = (function() {
             }
         });
 
-        if (!player1Sign) {
-            return 'You must choose a sign'
-        }
-        else {
-            if (player1Sign === 'X') {
-                player2Sign = 'O';
-            }
-            else {
-                player2Sign = 'X';
-            }
-        }
+        player1Sign === 'X' ? player2Sign = 'O' : player2Sign = 'X';
 
         player1 = new Player(player1Name.value, player1Sign, 0);
         player2 = new Player(player2Name.value, player2Sign, 0);
 
-        return ''
+        return 0;
     }
 
     function toggleSelected() {
@@ -213,6 +210,39 @@ const GameControl = (function() {
             setupPage.classList.add('active');
         }
 
+    }
+
+    function toggleWarning(elementID) {
+        const isWarningActive = elementID.classList.contains('warning')
+
+        if(!isWarningActive) {
+            elementID.classList.add('warning');
+        }
+        else{ 
+            elementID.classList.remove('warning');
+        }
+    }
+
+    function toggleValidInput() {
+        this.classList.remove('shake');
+        if (!this.checkValidity()) {
+            this.classList.remove('valid');
+            this.classList.add('invalid');
+        }
+        else {
+            this.classList.add('valid');
+            this.classList.remove('invalid');
+        }
+    }
+
+    function toggleShake() {
+        nameInputs.forEach(input => {
+            input.classList.remove('shake')
+            void input.offsetWidth;            
+            if(input.value === '') {
+                input.classList.add('shake');
+            }
+        });
     }
 
     function checkForWinner(index) {
