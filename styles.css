@@ -14,7 +14,7 @@
     --bg-color2: #1f1f1f;
     --bg-color3: #575757;
     --font-color: white;
-    --theme-color: #c159fd;
+    --theme-color: #8f41bd;
 }
 
 body {
@@ -22,7 +22,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: var(--bg-color1);
+    background-image: linear-gradient(var(--bg-color1), var(--bg-color2));
 }
 
 #gameBoard {
@@ -42,7 +42,8 @@ body {
 #playerDetails {
     display: flex;
     flex-direction: column;
-    gap: 30px
+    gap: 30px;
+    align-items: center;
 }
 
 .playerDetail {
@@ -57,8 +58,39 @@ input {
     color: black;
 }
 
+#playerSign {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#signs {
+    width: 80px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--theme-color);
+    border-radius: 5px;    
+}
+
+.signBtn {
+    max-width: 40px;
+    padding: 5px;
+    border-radius: 4px;
+}
+
 .signBtn.selected {
-    box-shadow: 2px 2px 2px white;
+    background-color: var(--theme-color);
+}
+
+#startButton {
+    color: white;
+    background-color: var(--theme-color);
+    padding: 5px 15px;
+    border: none;
+    border-radius: 5px;
 }
 
 .gameBoardField {
@@ -95,6 +127,7 @@ input {
     display: flex;
     flex-direction: column;
     gap: 30px;
+    align-items: center;
 }
 
 #gamePage.active {
@@ -107,7 +140,7 @@ input[type="text"] {
     color: white;
     font-size: 16px;
     outline: none;
-    border: 2px solid blue;
+    border: 2px solid var(--theme-color);
     border-radius: 10px;
     padding: 10px 10px;
     background: transparent;
