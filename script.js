@@ -155,6 +155,7 @@ const GameControl = (function() {
     }
 
     function initPlayers() {
+
         if ((player1Name.value === '' && player2Name.value === '') || 
             (player1Name.value === '' || player2Name.value === '')) {
                 return 1
@@ -162,7 +163,8 @@ const GameControl = (function() {
 
         signs.forEach(sign => {
             if (sign.classList.contains('selected')) {
-                player1Sign = sign.textContent
+                const fileName = sign.src.split('/').pop()
+                player1Sign = fileName.split('_')[0];
                 return;
             }
         });
@@ -210,17 +212,6 @@ const GameControl = (function() {
             setupPage.classList.add('active');
         }
 
-    }
-
-    function toggleWarning(elementID) {
-        const isWarningActive = elementID.classList.contains('warning')
-
-        if(!isWarningActive) {
-            elementID.classList.add('warning');
-        }
-        else{ 
-            elementID.classList.remove('warning');
-        }
     }
 
     function toggleValidInput() {
@@ -277,16 +268,29 @@ const GameControl = (function() {
 const DisplayController = (function() {
     const board = Gameboard.getBoard();
     const turnDisplay = document.querySelector('#playerTurn');
-    const p1ScoreDisplay = document.querySelector('#player1Score')
-    const p2ScoreDisplay = document.querySelector('#player2Score')
-    const drawScoreDisplay = document.querySelector('#drawScore')
-
-    let field;
+    const p1ScoreDisplay = document.querySelector('#player1Score');
+    const p2ScoreDisplay = document.querySelector('#player2Score');
+    const drawScoreDisplay = document.querySelector('#drawScore');
+    const gameBoardFields = document.querySelectorAll('.gameBoardField');
+    
 
     function displayBoard() {
+        var fieldElem;
+        var imageElem;
+
+        gameBoardFields.forEach(field => {
+            if (field.hasChildNodes()) {
+                field.removeChild(field.firstChild);
+            }
+        });
+
         for(let i = 0; i < board.length; i++) {
-            field = document.getElementById('field-'+i);
-            field.textContent = board[i];
+            fieldElem = document.getElementById('field-'+i);
+            imageElem = document.createElement('img');
+            if (board[i] !== '') {
+                imageElem.src = `./images/${board[i]}_icon_filled.png`;
+            }
+            fieldElem.appendChild(imageElem);
         }
     }
 

@@ -36,7 +36,16 @@ body {
 .gameBoardField {
     width: 100px;
     height: 100px;
-    border: 1px solid white;
+    border: 2px solid var(--theme-color);
+    border-radius: 5px;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gameBoardField>img {
+    max-width: 50px;
 }
 
 #playerDetails {
@@ -93,13 +102,6 @@ input {
     border-radius: 5px;
 }
 
-.gameBoardField {
-    font-size: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 #resultDisplay {
     max-width: 300px;
     display: grid;
@@ -111,7 +113,8 @@ input {
     font-size: 12px;
     width: 100px;
     height: 100px;
-    border: 1px solid white;
+    border: 1px solid var(--theme-color);
+    border-radius: 5px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -146,10 +149,6 @@ input[type="text"] {
     background: transparent;
 }
 
-/* input[type="text"].warning {
-    
-} */
-
 label {
     font-size: 1em;
     position: absolute;
@@ -172,7 +171,7 @@ label {
 }
 
 .nameInput.valid {
-    border: 2px solid green;
+    border: 2px solid var(--theme-color);
     transition: 0.2s ease-in-out;
 }
 
