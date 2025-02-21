@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
+    <div id="overlay"></div>
     <header></header>
     <main>
         <div id="setupPage" class="active">
@@ -36,6 +37,10 @@
             </div>
         </div>
         <div id="gamePage">
+            <div id="nextRound">
+                <p>Start next Round?</p>
+                <button id="nextRoundBtn" class="btn">Start</button>
+            </div>
             <div id="gameBoard">
                 <div id="field-0" class="gameBoardField" data-field-id = "field-0"></div>
                 <div id="field-1" class="gameBoardField" data-field-id = "field-1"></div>

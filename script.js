@@ -57,16 +57,18 @@ const GameControl = (function() {
     const player1Name = document.querySelector('#player1');
     const player2Name = document.querySelector('#player2');
     const nameInputs = document.querySelectorAll('.nameInput');
+    const nextRoundBtn = document.querySelector('#nextRoundBtn');
 
-    let player1Sign;
-    let player2Sign;
-    let player1;
-    let player2;    
-    let currentPlayer;
-    let draw = 0;
-    let round = 0;
-    let winnerFound = false;
-    let result;
+    var player1Sign;
+    var player2Sign;
+    var player1;
+    var player2;    
+    var currentPlayer;
+    var draw = 0;
+    var round = 0;
+    var winnerFound = false;
+    var result;
+
 
     signs.forEach(sign => {
         sign.addEventListener('click', toggleSelected)
@@ -78,17 +80,23 @@ const GameControl = (function() {
     })
 
     nameInputs.forEach(name => {
-        name.addEventListener('keyup', toggleValidInput)        
+        name.addEventListener('keyup', toggleValidInput)     
     });
 
+    nextRoundBtn.addEventListener('click', startNextRound);
+
     function initGame() {
-        result = initPlayers();
-        if (result !== 0) {
-            toggleShake();
-            return
+        if (round === 0) {
+            result = initPlayers();
+            if (result !== 0) {
+                toggleShake();
+                return
+            }
+
+            toggleGamePage();
         }
+        
         round++;
-        toggleGamePage();
         currentPlayer = player1;
         currentSign = player1.getSign();
         gameBoardFields.forEach((field) => field.addEventListener('click', markField))
@@ -112,7 +120,7 @@ const GameControl = (function() {
                 player2.updateScore();
             }
             round++;
-            Gameboard.resetBoard();
+            setTimeout(toggleNextRoundPopup, 2000);
             winnerFound = false;
         } else if (!Gameboard.getBoard().includes('')) {
             console.log('Its a Draw')
@@ -177,6 +185,21 @@ const GameControl = (function() {
         return 0;
     }
 
+    function startNextRound() {
+        const gameBoardFields = document.querySelectorAll('.gameBoardField');
+
+        toggleNextRoundPopup();
+        gameBoardFields.forEach(fieldElem => {
+            if(fieldElem.classList.contains('winner')) {
+                fieldElem.classList.remove('winner');
+            }
+        });
+        Gameboard.resetBoard();
+        DisplayController.displayBoard();
+        isNewRound = false;
+        initGame();
+    }
+
     function toggleSelected() {
         const isSelected = this.classList.contains('selected');
         let unselect;
@@ -213,6 +236,22 @@ const GameControl = (function() {
         }
 
     }
+
+    function toggleNextRoundPopup() {
+        const overlay = document.querySelector('#overlay');
+        const nextRoundPopup = document.querySelector('#nextRound');
+        const isPopupActive = nextRoundPopup.classList.contains('active');
+
+        if(!isPopupActive) {
+            nextRoundPopup.classList.add('active');
+            overlay.style.display = 'block';
+        }
+        else {
+            nextRoundPopup.classList.remove('active');
+            overlay.style.display = 'none';
+        }
+    }
+
 
     function toggleValidInput() {
         this.classList.remove('shake');
@@ -251,7 +290,7 @@ const GameControl = (function() {
         function winnerTrigger(provenPossibilitiy) {
             if(provenPossibilitiy.every((index) => Gameboard.getField(index) === currentPlayer.getSign())) {
                 winnerFound = true;
-                // Set class to highlight the winning row
+                DisplayController.setBackground(provenPossibilitiy);
             }
         }
 
@@ -304,11 +343,19 @@ const DisplayController = (function() {
         p2ScoreDisplay.textContent = player2Score;
         drawScoreDisplay.textContent = draw;
     }
+
+    function setBackground(fieldIDs) {
+        fieldIDs.forEach(fieldID => {
+            const fieldElem = document.getElementById('field-' + fieldID)
+            fieldElem.classList.add('winner');
+        });
+    }
     
     return {
         displayBoard,
         displayTurn,
-        displayScore
+        displayScore,
+        setBackground
     }
 
 })();
