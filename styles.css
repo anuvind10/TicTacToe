@@ -11,10 +11,12 @@
 
 :root {
     --bg-color1: #000000;
-    --bg-color2: #1f1f1f;
-    --bg-color3: #575757;
+    --bg-color2: #1e072e;
+    --bg-color3: #0b393e;
+    --bg-color4: #a7a7a7;
     --font-color: white;
-    --theme-color: #8f41bd;
+    --theme-color: #7319af;
+    --theme-color2: #198C93;
     --theme-color-opac: #1f1f1fb2;
 }
 
@@ -27,22 +29,22 @@ body {
 }
 
 #gameBoard {
-    max-width: 300px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    gap: 2px;
+    gap: 10px;
 }
 
 .gameBoardField {
     width: 100px;
     height: 100px;
-    border: 2px solid var(--theme-color);
+    border: 2px solid var(--bg-color4);
     border-radius: 5px;
     font-size: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: 5px 5px 5px #000000;
 }
 
 .gameBoardField>img {
@@ -72,51 +74,67 @@ input {
 }
 
 #signs {
-    width: 80px;
+    width: 82px;
     margin-top: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid var(--theme-color);
+    border: 1px solid var(--bg-color4);
     border-radius: 5px;    
 }
 
 .signBtn {
     max-width: 40px;
     padding: 5px;
-    border-radius: 4px;
+    border-radius: 5px;
 }
 
-.signBtn.selected {
+.signBtn.selected.signX {
     background-color: var(--theme-color);
+    transition: 0.3s ease-in;
+}
+
+.signBtn.selected.signO {
+    background-color: var(--theme-color2);
+    transition: 0.3s ease-in;
 }
 
 #startButton,
 #nextRoundBtn {
     color: white;
-    background-color: var(--theme-color);
     padding: 5px 15px;
     border: none;
     border-radius: 5px;
 }
 
-#resultDisplay {
-    max-width: 300px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
+#startButton.signX {
+    background-color: var(--theme-color);
+    transition: 0.3s ease-in;
 }
 
-.resultDisplay {
+#startButton.signO {
+    background-color: var(--theme-color2);
+    transition: 0.3s ease-in;
+}
+
+
+#resultDisplay {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.result {
     font-size: 12px;
-    width: 100px;
-    height: 100px;
-    border: 1px solid var(--theme-color);
+    width: 140px;
+    height: 80px;
+    border: 2px solid var(black);
     border-radius: 5px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    box-shadow: 5px 5px 5px #000000;
 }
 
 #setupPage,
@@ -133,17 +151,20 @@ input {
 }
 
 #gamePage.active {
+    width: 100vw;
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 50px;
+    align-items: center;
+    justify-content: center;
 }
 
 input[type="text"] {
     color: white;
     font-size: 16px;
     outline: none;
-    border: 2px solid var(--theme-color);
+    border: 2px solid var(--bg-color4);
     border-radius: 10px;
     padding: 10px 10px;
     background: transparent;
@@ -181,8 +202,13 @@ label {
     animation-iteration-count: 1;
 }
 
-.gameBoardField.winner{
+.gameBoardField.winner.signX{
     background-color: var(--theme-color);
+    transition: 0.5s ease-in;
+}
+
+.gameBoardField.winner.signO{
+    background-color: var(--theme-color2);
     transition: 0.5s ease-in;
 }
 
@@ -216,6 +242,20 @@ label {
     background: rgba(0, 0, 0, 0.85);
     z-index: 5;
 }
+
+#player1Win {
+    background-color: var(--theme-color);
+}
+
+#player2Win {
+    background-color: var(--theme-color2);
+}
+
+
+#draw {
+    background-color: #a7a7a71e;
+}
+
 
 
 @keyframes shake {

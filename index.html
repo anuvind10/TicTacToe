@@ -7,9 +7,8 @@
     <script defer src="./script.js"></script>
     <link rel="stylesheet" href="./styles.css">
 </head>
-<body>
+<body id="body" class="signX">
     <div id="overlay"></div>
-    <header></header>
     <main>
         <div id="setupPage" class="active">
             <div id="playerDetails">
@@ -24,13 +23,13 @@
                 <div id="playerSign" class="playerDetail">
                     <p>Player1 Sign: </p>
                     <div id="signs">
-                        <img src="./images/X_icon_filled.png" id="signX" class="btn signBtn selected" />
+                        <img src="./images/X_icon_filled.png" id="signX" class="btn signBtn selected signX" />
                         <img src="./images/O_icon_filled.png" id="signO" class="btn signBtn" />
                     </div>
                 </div>
             </div>
             <div id="startGame">
-                <button id="startButton" class="btn">Start Game</button>
+                <button id="startButton" class="btn signX">Start Game</button>
             </div>
             <div id="turnDisplay">
                 <p id="playerTurn" class="turn"></p>
@@ -53,15 +52,15 @@
                 <div id="field-8" class="gameBoardField" data-field-id = "field-8"></div>
             </div>
             <div id="resultDisplay">
-                <div id="player1Win" class="resultDisplay">
+                <div id="player1Win" class="result">
                     <p>Player1</p>
                     <p id="player1Score"></p>
                 </div>
-                <div id="draw" class="resultDisplay">
+                <div id="draw" class="result">
                     <p>Draws</p>
                     <p id="drawScore"></p>
                 </div>
-                <div id="player2Win" class="resultDisplay">
+                <div id="player2Win" class="result">
                     <p>Player2</p>
                     <p id="player2Score"></p>
                 </div>

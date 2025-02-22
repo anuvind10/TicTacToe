@@ -51,6 +51,7 @@ function Player(name, sign, score) {
 
 // Controls the flow of the game
 const GameControl = (function() {
+    const body = document.querySelector('#body')
     const startGame = document.querySelector('#startButton');
     const signs = document.querySelectorAll('.signBtn');
     const gameBoardFields = document.querySelectorAll('.gameBoardField')
@@ -58,6 +59,8 @@ const GameControl = (function() {
     const player2Name = document.querySelector('#player2');
     const nameInputs = document.querySelectorAll('.nameInput');
     const nextRoundBtn = document.querySelector('#nextRoundBtn');
+    const gamePage = document.querySelector('#gamePage');
+    const setupPage = document.querySelector('#setupPage');
 
     var player1Sign;
     var player2Sign;
@@ -130,7 +133,6 @@ const GameControl = (function() {
             winnerFound = false;
         }
 
-        DisplayController.displayBoard();
         DisplayController.displayScore(player1.getScore(), player2.getScore(), draw)
         console.log(round);
         if(round > 3) {
@@ -157,9 +159,8 @@ const GameControl = (function() {
             currentSign = player1.getSign();
         }
 
+        toggleBackground(currentSign)
         DisplayController.displayTurn(currentPlayer)
-
-        
     }
 
     function initPlayers() {
@@ -206,24 +207,56 @@ const GameControl = (function() {
 
         if (this.id === 'signX') {
             unselect = document.querySelector('#signO');
+            if(!startGame.classList.contains(this.id)) {
+                startGame.classList.remove('signO');
+                startGame.classList.add(this.id);
+            }
         }
         else {
             unselect = document.querySelector('#signX');
+            if(!startGame.classList.contains(this.id)) {
+                startGame.classList.remove('signX');
+                startGame.classList.add(this.id);
+            }
         }
-
         if (!isSelected) {
             this.classList.add('selected');
+            if (!this.classList.contains(this.id)) {
+                this.classList.add(this.id);
+            }
         }
 
         if (unselect.classList.contains('selected')) {
             unselect.classList.remove('selected');
         }
-        
+        if (unselect.classList.contains(this.id)) {
+            unselect.classList.remove(this.id);
+        }
+
+        toggleBackground(this.id)
+    }
+
+    function toggleBackground(sign) {
+        if (sign === 'X' || sign === 'signX') {
+            body.style.backgroundImage = 'linear-gradient(var(--bg-color1), var(--bg-color2))'
+        }
+        else {
+            body.style.backgroundImage = 'linear-gradient(var(--bg-color1), var(--bg-color3))'
+        }
+    }
+
+    function toggleSigns(fieldIDs) {
+        var fieldElem;
+        var sign;
+        fieldIDs.forEach(fieldID => {
+            fieldElem = document.getElementById('field-' + fieldID)
+            sign = fieldElem.childNodes[0];
+            sign.src = sign.src.replace('filled2', 'filled');
+            console.log('test')
+        });
     }
 
     function toggleGamePage() {
-        const gamePage = document.querySelector('#gamePage');
-        const setupPage = document.querySelector('#setupPage');
         const isGamePageActive = gamePage.classList.contains('active');
 
         if (!isGamePageActive) {
@@ -290,6 +323,7 @@ const GameControl = (function() {
         function winnerTrigger(provenPossibilitiy) {
             if(provenPossibilitiy.every((index) => Gameboard.getField(index) === currentPlayer.getSign())) {
                 winnerFound = true;
+                toggleSigns(provenPossibilitiy);
                 DisplayController.setBackground(provenPossibilitiy);
             }
         }
@@ -326,8 +360,9 @@ const DisplayController = (function() {
         for(let i = 0; i < board.length; i++) {
             fieldElem = document.getElementById('field-'+i);
             imageElem = document.createElement('img');
+            imageElem.style.width = '50px';
             if (board[i] !== '') {
-                imageElem.src = `./images/${board[i]}_icon_filled.png`;
+                imageElem.src = `./images/${board[i]}_icon_filled2.png`;
             }
             fieldElem.appendChild(imageElem);
         }
@@ -345,9 +380,13 @@ const DisplayController = (function() {
     }
 
     function setBackground(fieldIDs) {
+        var fieldElem;
+        var sign;
         fieldIDs.forEach(fieldID => {
-            const fieldElem = document.getElementById('field-' + fieldID)
+            fieldElem = document.getElementById('field-' + fieldID)
+            sign = fieldElem.childNodes[0].src.split('/').pop().split('_')[0];
             fieldElem.classList.add('winner');
+            fieldElem.classList.add('sign' + sign);
         });
     }
     
