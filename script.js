@@ -116,11 +116,16 @@ const GameControl = (function() {
     function markField() {
         const fieldID = this.getAttribute('data-field-id').split('-')[1];
 
+        if(Gameboard.getField(fieldID) !== '') {
+            return
+        }
+        
         Gameboard.setField(fieldID, currentSign);
         DisplayController.displayBoard();
         checkForWinner(parseInt(fieldID));
         
         if(winnerFound) {
+            gameBoardFields.forEach((field) => field.disabled = true);
             if (currentPlayer == player1) {
                 player1.updateScore();
             }
@@ -129,15 +134,15 @@ const GameControl = (function() {
             }
             round++;
             if (round < 3){
-                setTimeout(toggleNextRoundPopup, 2000);
+                setTimeout(toggleNextRoundPopup, 1000, 'win');
             }
             winnerFound = false;
         } else if (!Gameboard.getBoard().includes('')) {
-            console.log('Its a Draw')
+            gameBoardFields.forEach((field) => field.disabled = true);
             draw++
             round++;
             if (round < 3){
-                setTimeout(toggleNextRoundPopup, 2000);
+                setTimeout(toggleNextRoundPopup, 1000, 'draw');
             }
         } else {
             if (currentPlayer === player1) {
@@ -156,10 +161,10 @@ const GameControl = (function() {
         DisplayController.displayScore(player1.getScore(), player2.getScore(), draw)
         if(round >= 3) {
             if (player1.getScore() > player2.getScore()) {
-                toggleFinalDisplay(player1.getSign())
+                setTimeout(toggleFinalDisplay, 1000, player1.getSign());
             }
             else if (player2.getScore() > player1.getScore()) {
-                toggleFinalDisplay(player2.getSign())
+                setTimeout(toggleFinalDisplay, 1000, player1.getSign());
             }
             else {
                 console.log('Its a draw');
@@ -195,7 +200,7 @@ const GameControl = (function() {
     function startNextRound() {
         const gameBoardFields = document.querySelectorAll('.gameBoardField');
 
-        toggleNextRoundPopup();
+        toggleNextRoundPopup('reset');
         gameBoardFields.forEach(fieldElem => {
             if(fieldElem.classList.contains('winner')) {
                 fieldElem.classList.remove('winner');
@@ -293,9 +298,10 @@ const GameControl = (function() {
 
     }
 
-    function toggleNextRoundPopup() {
+    function toggleNextRoundPopup(result) {
         const overlay = document.querySelector('#overlay');
         const roundWinner = document.querySelector('#RoundWinnerSign');
+        const resultText = document.querySelector('#resultText');
         const isPopupActive = nextRoundPopup.classList.contains('active');
 
         if(!isPopupActive) {
@@ -307,18 +313,26 @@ const GameControl = (function() {
             overlay.style.display = 'none';
         }
 
-        if (currentSign === 'X') {
-            nextRoundBtn.style.backgroundColor = 'var(--theme-color)'
-            quitBtn.style.backgroundColor = 'var(--theme-color)'
-            // nextRoundPopup.style.backgroundColor = 'var(--bg-color2)'
+        if (result !== 'reset') {
+            if (currentSign === 'X') {
+                nextRoundBtn.style.backgroundColor = 'var(--theme-color)'
+                quitBtn.style.backgroundColor = 'var(--theme-color)'
+            }
+            else {
+                nextRoundBtn.style.backgroundColor = 'var(--theme-color2)'
+                quitBtn.style.backgroundColor = 'var(--theme-color2)'
+            }
+    
+            if(result === 'win') {
+                roundWinner.src = `./images/${currentSign}_icon_filled2.png`;
+                roundWinner.style.display = 'block';
+                resultText.textContent = 'Wins the round!'
+            }
+            else {
+                roundWinner.style.display = 'none';
+                resultText.textContent = 'it\'s a draw!';
+            }
         }
-        else {
-            nextRoundBtn.style.backgroundColor = 'var(--theme-color2)'
-            quitBtn.style.backgroundColor = 'var(--theme-color2)'
-            // nextRoundPopup.style.backgroundColor = 'var(--bg-color3)'
-        }
-
-        roundWinner.src = `./images/${currentSign}_icon_filled2.png`;
     }
 
 
@@ -406,7 +420,13 @@ const GameControl = (function() {
     }
 
     function restartGame() {
-        
+        Gameboard.resetBoard();
+        gamePage.classList.remove('active');
+        setupPage.classList.add('active');
+        overlay.style.display = 'none';
+        nameInputs.forEach(input => {
+            input.value = '';
+        });
     }
 
 })();
