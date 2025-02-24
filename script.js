@@ -60,6 +60,7 @@ const GameControl = (function() {
     const nameInputs = document.querySelectorAll('.nameInput');
     const nextRoundBtn = document.querySelector('#nextRoundBtn');
     const quitBtn = document.querySelector('#quitBtn');
+    const restartBtn = document.querySelector('#restartBtn');
     const gamePage = document.querySelector('#gamePage');
     const setupPage = document.querySelector('#setupPage');
     const nextRoundPopup = document.querySelector('#nextRound');
@@ -92,6 +93,7 @@ const GameControl = (function() {
     nextRoundBtn.addEventListener('click', startNextRound);
 
     quitBtn.addEventListener('click', quitGame);
+    restartBtn.addEventListener('click', restartGame);
 
     function initGame() {
         if (round === 0) {
@@ -127,13 +129,17 @@ const GameControl = (function() {
                 player2.updateScore();
             }
             round++;
-            setTimeout(toggleNextRoundPopup, 2000);
+            if (round <= 3){
+                setTimeout(toggleNextRoundPopup, 2000);
+            }
             winnerFound = false;
         } else if (!Gameboard.getBoard().includes('')) {
             console.log('Its a Draw')
             draw++
             round++;
-            setTimeout(toggleNextRoundPopup, 2000);
+            if (round <= 3){
+                setTimeout(toggleNextRoundPopup, 2000);
+            }
         } else {
             if (currentPlayer === player1) {
                 currentPlayer = player2;
@@ -151,15 +157,14 @@ const GameControl = (function() {
         DisplayController.displayScore(player1.getScore(), player2.getScore(), draw)
         if(round > 3) {
             if (player1.getScore() > player2.getScore()) {
-                console.log(`${player1.getName()} Wins`)
+                toggleFinalDisplay(player1.getSign())
             }
             else if (player2.getScore() > player1.getScore()) {
-                console.log(`${player2.getName()} Wins`)
+                toggleFinalDisplay(player2.getSign())
             }
             else {
                 console.log('Its a draw');
             }
-            console.log('Game Ends!')
 
             return;
         }
@@ -291,7 +296,7 @@ const GameControl = (function() {
 
     function toggleNextRoundPopup() {
         const overlay = document.querySelector('#overlay');
-        const winner = document.querySelector('#winnerSign');
+        const roundWinner = document.querySelector('#RoundWinnerSign');
         const isPopupActive = nextRoundPopup.classList.contains('active');
 
         if(!isPopupActive) {
@@ -314,7 +319,7 @@ const GameControl = (function() {
             // nextRoundPopup.style.backgroundColor = 'var(--bg-color3)'
         }
 
-        winner.src = `./images/${currentSign}_icon_filled2.png`;
+        roundWinner.src = `./images/${currentSign}_icon_filled2.png`;
     }
 
 
@@ -381,6 +386,28 @@ const GameControl = (function() {
 
     function quitGame() {
         return
+    }
+
+    function toggleFinalDisplay(winner) {
+        const finalDisplay = document.querySelector('#finalResult');
+        const finalWinnerSign = document.querySelector('#finalWinnerSign');
+        if (!finalDisplay.classList.contains('active')) {
+            finalDisplay.classList.add('active');
+            overlay.style.display = 'block';
+        }
+
+        if (winner === 'X') {
+            restartBtn.style.backgroundColor = 'var(--theme-color)'
+        }
+        else {
+            restartBtn.style.backgroundColor = 'var(--theme-color2)'
+        }
+
+        finalWinnerSign.src = `./images/${winner}_icon_filled2.png`;
+    }
+
+    function restartGame() {
+        
     }
 
 })();
