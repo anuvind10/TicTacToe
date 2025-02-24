@@ -106,7 +106,6 @@ const GameControl = (function() {
             toggleGamePage();
         }
         
-        round++;
         currentPlayer = player1;
         currentSign = player1.getSign();
         gameBoardFields.forEach((field) => field.addEventListener('click', markField))
@@ -129,7 +128,7 @@ const GameControl = (function() {
                 player2.updateScore();
             }
             round++;
-            if (round <= 3){
+            if (round < 3){
                 setTimeout(toggleNextRoundPopup, 2000);
             }
             winnerFound = false;
@@ -137,7 +136,7 @@ const GameControl = (function() {
             console.log('Its a Draw')
             draw++
             round++;
-            if (round <= 3){
+            if (round < 3){
                 setTimeout(toggleNextRoundPopup, 2000);
             }
         } else {
@@ -155,7 +154,7 @@ const GameControl = (function() {
         }
 
         DisplayController.displayScore(player1.getScore(), player2.getScore(), draw)
-        if(round > 3) {
+        if(round >= 3) {
             if (player1.getScore() > player2.getScore()) {
                 toggleFinalDisplay(player1.getSign())
             }
