@@ -13,7 +13,7 @@
     --bg-color1: #000000;
     --bg-color2: #1e072e;
     --bg-color3: #0b393e;
-    --bg-color4: #a7a7a7;
+    --bg-color4: #bbbbbb;
     --font-color: white;
     --theme-color: #7319af;
     --theme-color2: #198C93;
@@ -128,7 +128,7 @@ input {
     font-size: 12px;
     width: 140px;
     height: 80px;
-    border: 2px solid var(black);
+    border: none;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -261,6 +261,33 @@ label {
     background-color: #a7a7a71e;
 }
 
+#turnDisplay {
+    width: 100px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px #000000;
+}
+
+#turnDisplay.signX {
+    background-color: var(--theme-color);
+}
+
+#turnDisplay.signO {
+    background-color: var(--theme-color2);
+}
+
+#playerTurnSign {
+    max-width: 15px;
+}
+
+#playerTurn {
+    font-weight: bold;
+}
 
 
 @keyframes shake {

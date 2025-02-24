@@ -58,7 +58,6 @@ const GameControl = (function() {
     const player1Name = document.querySelector('#player1');
     const player2Name = document.querySelector('#player2');
     const nameInputs = document.querySelectorAll('.nameInput');
-    const nameLabels = document.querySelectorAll('.label');
     const nextRoundBtn = document.querySelector('#nextRoundBtn');
     const gamePage = document.querySelector('#gamePage');
     const setupPage = document.querySelector('#setupPage');
@@ -131,14 +130,22 @@ const GameControl = (function() {
             console.log('Its a Draw')
             draw++
             round++;
-            Gameboard.resetBoard();
-            winnerFound = false;
+            setTimeout(toggleNextRoundPopup, 2000);
         } else {
+            if (currentPlayer === player1) {
+                currentPlayer = player2;
+                currentSign = player2.getSign();
+            }
+            else {
+                currentPlayer = player1;
+                currentSign = player1.getSign();
+            }
+    
             toggleBackground(currentSign)
+            DisplayController.displayTurn()
         }
 
         DisplayController.displayScore(player1.getScore(), player2.getScore(), draw)
-        console.log(round);
         if(round > 3) {
             if (player1.getScore() > player2.getScore()) {
                 console.log(`${player1.getName()} Wins`)
@@ -153,16 +160,6 @@ const GameControl = (function() {
 
             return;
         }
-        
-        if (currentPlayer === player1) {
-            currentPlayer = player2;
-            currentSign = player2.getSign();
-        }
-        else {
-            currentPlayer = player1;
-            currentSign = player1.getSign();
-        }
-        DisplayController.displayTurn(currentPlayer)
     }
 
     function initPlayers() {
@@ -301,6 +298,15 @@ const GameControl = (function() {
             nextRoundPopup.classList.remove('active');
             overlay.style.display = 'none';
         }
+
+        if (currentSign === 'X') {
+            nextRoundBtn.style.backgroundColor = 'var(--theme-color)'
+            nextRoundPopup.style.backgroundColor = 'var(--bg-color2)'
+        }
+        else {
+            nextRoundBtn.style.backgroundColor = 'var(--theme-color2)'
+            nextRoundPopup.style.backgroundColor = 'var(--bg-color3)'
+        }
     }
 
 
@@ -370,7 +376,8 @@ const GameControl = (function() {
 // Controls the display
 const DisplayController = (function() {
     const board = Gameboard.getBoard();
-    const turnDisplay = document.querySelector('#playerTurn');
+    const turnSign = document.querySelector('#playerTurnSign');
+    const turnDisplay = document.querySelector('#turnDisplay');
     const p1ScoreDisplay = document.querySelector('#player1Score');
     const p2ScoreDisplay = document.querySelector('#player2Score');
     const drawScoreDisplay = document.querySelector('#drawScore');
@@ -398,9 +405,11 @@ const DisplayController = (function() {
         }
     }
 
-    function displayTurn(player) {
-        turnDisplay.textContent = `Turn: ${player.getName()}`;
-
+    function displayTurn() {
+        turnSign.src = `./images/${currentSign}_icon_filled.png`;
+        turnDisplay.classList.remove('signX');
+        turnDisplay.classList.remove('signO');
+        turnDisplay.classList.add(`sign${currentSign}`);
     }
 
     function displayScore(player1Score, player2Score, draw) {
