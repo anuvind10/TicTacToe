@@ -59,6 +59,7 @@ const GameControl = (function() {
     const player2Name = document.querySelector('#player2');
     const nameInputs = document.querySelectorAll('.nameInput');
     const nextRoundBtn = document.querySelector('#nextRoundBtn');
+    const quitBtn = document.querySelector('#quitBtn');
     const gamePage = document.querySelector('#gamePage');
     const setupPage = document.querySelector('#setupPage');
     const nextRoundPopup = document.querySelector('#nextRound');
@@ -89,6 +90,8 @@ const GameControl = (function() {
     });
 
     nextRoundBtn.addEventListener('click', startNextRound);
+
+    quitBtn.addEventListener('click', quitGame);
 
     function initGame() {
         if (round === 0) {
@@ -288,6 +291,7 @@ const GameControl = (function() {
 
     function toggleNextRoundPopup() {
         const overlay = document.querySelector('#overlay');
+        const winner = document.querySelector('#winnerSign');
         const isPopupActive = nextRoundPopup.classList.contains('active');
 
         if(!isPopupActive) {
@@ -301,12 +305,16 @@ const GameControl = (function() {
 
         if (currentSign === 'X') {
             nextRoundBtn.style.backgroundColor = 'var(--theme-color)'
-            nextRoundPopup.style.backgroundColor = 'var(--bg-color2)'
+            quitBtn.style.backgroundColor = 'var(--theme-color)'
+            // nextRoundPopup.style.backgroundColor = 'var(--bg-color2)'
         }
         else {
             nextRoundBtn.style.backgroundColor = 'var(--theme-color2)'
-            nextRoundPopup.style.backgroundColor = 'var(--bg-color3)'
+            quitBtn.style.backgroundColor = 'var(--theme-color2)'
+            // nextRoundPopup.style.backgroundColor = 'var(--bg-color3)'
         }
+
+        winner.src = `./images/${currentSign}_icon_filled2.png`;
     }
 
 
@@ -369,6 +377,10 @@ const GameControl = (function() {
                         Gameboard.getField(index) === currentPlayer.getSign() ? winnerTrigger(possibleCombos) : false )
                     )
         
+    }
+
+    function quitGame() {
+        return
     }
 
 })();

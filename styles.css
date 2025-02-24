@@ -11,13 +11,13 @@
 
 :root {
     --bg-color1: #000000;
-    --bg-color2: #1e072e;
-    --bg-color3: #0b393e;
+    --bg-color2: #270b3b;
+    --bg-color3: #0b3a3f;
     --bg-color4: #bbbbbb;
     --font-color: white;
     --theme-color: #7319af;
     --theme-color2: #198C93;
-    --theme-color-opac: #1f1f1fb2;
+    --bg-color-opac: #000000a1;
 }
 
 body {
@@ -100,11 +100,16 @@ input {
 }
 
 #startButton,
-#nextRoundBtn {
+#nextRoundBtn,
+#quitBtn {
     color: white;
+    font-weight: bold;
+    width: 150px;
+    height: 35px;
     padding: 5px 15px;
     border: none;
     border-radius: 5px;
+    box-shadow: 5px 5px 5px #000000;
 }
 
 #startButton.signX {
@@ -222,14 +227,14 @@ label {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 300px;
-    padding: 20px 0;
+    width: 500px;
+    /* padding: 20px 0; */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    background-color: var(--theme-color-opac);
+    background-color: var(--bg-color-opac);
     border: 2px solid var(--bg-color4);
     border-radius: 10px;
     z-index: 10;
@@ -287,6 +292,31 @@ label {
 
 #playerTurn {
     font-weight: bold;
+}
+
+#winnerDisplay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding-top: 20px;
+}
+
+#winnerDisplay>p {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+#winnerSign {
+    max-width: 25px;
+}
+
+#buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 30px;
 }
 
 
