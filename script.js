@@ -125,7 +125,7 @@ const GameControl = (function() {
         checkForWinner(parseInt(fieldID));
         
         if(winnerFound) {
-            gameBoardFields.forEach((field) => field.disabled = true);
+            gameBoardFields.forEach((field) => field.style.pointerEvents = 'none');
             if (currentPlayer == player1) {
                 player1.updateScore();
             }
@@ -138,7 +138,7 @@ const GameControl = (function() {
             }
             winnerFound = false;
         } else if (!Gameboard.getBoard().includes('')) {
-            gameBoardFields.forEach((field) => field.disabled = true);
+            gameBoardFields.forEach((field) => field.style.pointerEvents = 'none');
             draw++
             round++;
             if (round < 3){
@@ -161,10 +161,10 @@ const GameControl = (function() {
         DisplayController.displayScore(player1.getScore(), player2.getScore(), draw)
         if(round >= 3) {
             if (player1.getScore() > player2.getScore()) {
-                setTimeout(toggleFinalDisplay, 1000, player1.getSign());
+                setTimeout(toggleFinalDisplay, 1000, player1);
             }
             else if (player2.getScore() > player1.getScore()) {
-                setTimeout(toggleFinalDisplay, 1000, player1.getSign());
+                setTimeout(toggleFinalDisplay, 1000, player2);
             }
             else {
                 console.log('Its a draw');
@@ -199,6 +199,7 @@ const GameControl = (function() {
 
     function startNextRound() {
         const gameBoardFields = document.querySelectorAll('.gameBoardField');
+        gameBoardFields.forEach((field) => field.style.pointerEvents = 'auto');
 
         toggleNextRoundPopup('reset');
         gameBoardFields.forEach(fieldElem => {
@@ -403,20 +404,23 @@ const GameControl = (function() {
 
     function toggleFinalDisplay(winner) {
         const finalDisplay = document.querySelector('#finalResult');
-        const finalWinnerSign = document.querySelector('#finalWinnerSign');
+        const finalWinner = document.querySelector('#finalWinner');
         if (!finalDisplay.classList.contains('active')) {
             finalDisplay.classList.add('active');
             overlay.style.display = 'block';
         }
 
-        if (winner === 'X') {
-            restartBtn.style.backgroundColor = 'var(--theme-color)'
+        finalWinner.innerHTML = winner.getName();
+
+        if (winner.getSign() === 'X') {
+            restartBtn.style.backgroundColor = 'var(--theme-color)';
+            finalWinner.style.color = 'var(--theme-color)';
         }
         else {
-            restartBtn.style.backgroundColor = 'var(--theme-color2)'
+            restartBtn.style.backgroundColor = 'var(--theme-color2)';
+            finalWinner.style.color = 'var(--theme-color2)';
         }
 
-        finalWinnerSign.src = `./images/${winner}_icon_filled2.png`;
     }
 
     function restartGame() {

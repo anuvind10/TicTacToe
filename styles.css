@@ -341,7 +341,7 @@ label {
     z-index: 15;
 }
 
-#finalResult>p {
+#finalResult > p {
     font-size: 20px;
     font-weight: bold;
 }
