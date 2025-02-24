@@ -58,9 +58,12 @@ const GameControl = (function() {
     const player1Name = document.querySelector('#player1');
     const player2Name = document.querySelector('#player2');
     const nameInputs = document.querySelectorAll('.nameInput');
+    const nameLabels = document.querySelectorAll('.label');
     const nextRoundBtn = document.querySelector('#nextRoundBtn');
     const gamePage = document.querySelector('#gamePage');
     const setupPage = document.querySelector('#setupPage');
+    const nextRoundPopup = document.querySelector('#nextRound');
+
 
     var player1Sign;
     var player2Sign;
@@ -115,7 +118,6 @@ const GameControl = (function() {
         checkForWinner(parseInt(fieldID));
         
         if(winnerFound) {
-            console.log(`Winner is ${currentPlayer.getName()}`)
             if (currentPlayer == player1) {
                 player1.updateScore();
             }
@@ -131,6 +133,8 @@ const GameControl = (function() {
             round++;
             Gameboard.resetBoard();
             winnerFound = false;
+        } else {
+            toggleBackground(currentSign)
         }
 
         DisplayController.displayScore(player1.getScore(), player2.getScore(), draw)
@@ -158,8 +162,6 @@ const GameControl = (function() {
             currentPlayer = player1;
             currentSign = player1.getSign();
         }
-
-        toggleBackground(currentSign)
         DisplayController.displayTurn(currentPlayer)
     }
 
@@ -238,11 +240,29 @@ const GameControl = (function() {
 
     function toggleBackground(sign) {
         if (sign === 'X' || sign === 'signX') {
-            body.style.backgroundImage = 'linear-gradient(var(--bg-color1), var(--bg-color2))'
+            body.style.backgroundImage = 'linear-gradient(var(--bg-color1), var(--bg-color2))';
         }
         else {
             body.style.backgroundImage = 'linear-gradient(var(--bg-color1), var(--bg-color3))'
         }
+
+        nameInputs.forEach(input => {
+            if(input.classList.contains('valid')) {
+                if (input.classList.contains('signX')) {
+                    input.classList.remove('signX');
+                }
+                else {
+                    input.classList.remove('signO');
+                }
+                
+                if (sign === 'X' || sign === 'signX') {
+                    input.classList.add('signX');
+                }
+                else {
+                    input.classList.add('signO');
+                }
+            }            
+        });
     }
 
     function toggleSigns(fieldIDs) {
@@ -252,7 +272,6 @@ const GameControl = (function() {
             fieldElem = document.getElementById('field-' + fieldID)
             sign = fieldElem.childNodes[0];
             sign.src = sign.src.replace('filled2', 'filled');
-            console.log('test')
         });
     }
 
@@ -272,7 +291,6 @@ const GameControl = (function() {
 
     function toggleNextRoundPopup() {
         const overlay = document.querySelector('#overlay');
-        const nextRoundPopup = document.querySelector('#nextRound');
         const isPopupActive = nextRoundPopup.classList.contains('active');
 
         if(!isPopupActive) {
@@ -296,6 +314,18 @@ const GameControl = (function() {
             this.classList.add('valid');
             this.classList.remove('invalid');
         }
+
+        signs.forEach(sign => {
+            if (sign.classList.contains('selected')) {
+                if (sign.id === 'signX' && this.classList.contains('signO')) {
+                    this.classList.remove('signO');
+                }
+                else if (sign.id === 'signO' && this.classList.contains('signX')) {
+                    this.classList.remove('signX');
+                }
+                this.classList.add(sign.id);
+            }           
+        });
     }
 
     function toggleShake() {
