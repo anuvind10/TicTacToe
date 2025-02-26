@@ -95,7 +95,7 @@ const GameControl = (function() {
 
     nextRoundBtn.addEventListener('click', startNextRound);
 
-    quitBtn.addEventListener('click', quitGame);
+    quitBtn.addEventListener('click', restartGame);
     restartBtn.addEventListener('click', restartGame);
 
     function initGame() {
@@ -109,11 +109,20 @@ const GameControl = (function() {
             toggleGamePage();
         }
         
-        currentPlayer = player1;
-        currentSign = player1.getSign();
+        DisplayController.displayBoard();
+        if (player1.getSign() === 'X') {
+            currentPlayer = player1;
+            currentSign = player1.getSign();
+        }
+        else {
+            currentPlayer = player2;
+            currentSign = player2.getSign();
+        }
+        
         gameBoardFields.forEach((field) => field.addEventListener('click', markField))
         DisplayController.displayTurn(currentPlayer);
         DisplayController.displayScore(player1.getScore(), player2.getScore(), draw)
+        toggleBackground(currentSign);
     }
 
     function markField() {
@@ -140,7 +149,7 @@ const GameControl = (function() {
             if (round < 3){
                 if (round === 2) {
                     if ((player1.getScore() === 2 && player2.getScore() === 0) || 
-                        (player2.getScore() === 2) && player1.getScore() === 0) {
+                        (player2.getScore() === 2 && player1.getScore() === 0)) {
                             gameOver = true;
                     }
                 }
@@ -149,7 +158,7 @@ const GameControl = (function() {
                     setTimeout(toggleNextRoundPopup, 1000, 'win');
                 }
                 else {
-                    setTimeout(toggleFinalDisplay, 1000, 'win', player1);
+                    setTimeout(toggleFinalDisplay, 1000, 'win', currentPlayer);
                 }
             }
             winnerFound = false;
@@ -157,7 +166,10 @@ const GameControl = (function() {
             gameBoardFields.forEach((field) => field.style.pointerEvents = 'none');
             draw++
             round++;
-            if (round < 3){
+            if (draw === 2) {
+                setTimeout(toggleFinalDisplay, 1000, 'draw');
+            }
+            else if (round < 3){
                 setTimeout(toggleNextRoundPopup, 1000, 'draw');
             }
         } else {
@@ -434,10 +446,6 @@ const GameControl = (function() {
         
     }
 
-    function quitGame() {
-        return
-    }
-
     function toggleFinalDisplay(result, winner='none') {
         const finalDisplay = document.querySelector('#finalResult');
         const finalWinner = document.querySelector('#finalWinner');
@@ -451,6 +459,8 @@ const GameControl = (function() {
                 element.style.display = 'none';
             });
             finalWinner.innerHTML = 'It\'s a Draw';
+            finalWinner.style.color = 'white';
+            restartBtn.style.backgroundColor = 'var(--theme-color3)';
         }
         else {
             winResult.forEach(element => {
@@ -471,13 +481,51 @@ const GameControl = (function() {
     }
 
     function restartGame() {
+        const finalDisplay = document.querySelector('#finalResult');
+
         Gameboard.resetBoard();
         gamePage.classList.remove('active');
         setupPage.classList.add('active');
+        finalDisplay.classList.remove('active');
         overlay.style.display = 'none';
         nameInputs.forEach(input => {
             input.value = '';
         });
+
+        round = 0;
+        draw = 0;
+        nameInputs.forEach(input => {
+            input.classList.remove('signX');
+            input.classList.remove('signO');
+        });
+
+        player1Win.removeChild(player1Win.firstChild);
+        player2Win.removeChild(player2Win.firstChild);
+
+        gameBoardFields.forEach(field => {
+            if (field.classList.contains('winner')) {
+                field.classList.remove('winner');
+                field.classList.remove('signO');
+                field.classList.remove('signX');
+            }
+        });
+
+        gameBoardFields.forEach((field) => field.style.pointerEvents = 'auto');
+        gameOver = false;
+        toggleBackground('X');
+        signs.forEach(sign => {
+            if(sign.id === 'signX' && !sign.classList.contains('selected')) {
+                sign.classList.add('selected');
+            }
+            else if (sign.id === 'signO') {
+                sign.classList.remove('selected');
+            }
+        });
+
+        if(!startGame.classList.contains('signX')) {
+            startGame.classList.add('signX');
+        }
+        startGame.classList.remove('signO');
     }
 
 })();

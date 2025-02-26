@@ -16,7 +16,9 @@
     --bg-color4: #bbbbbb;
     --font-color: white;
     --theme-color: #7319af;
+    --theme-color-light: #841dc9;
     --theme-color2: #198C93;
+    --theme-color2-light: #1fa9b1;
     --theme-color3: #a06e11;
     --bg-color-opac: #000000a1;
 }
@@ -345,6 +347,23 @@ label {
 
 #finalWinnerSign {
     max-width: 50px;
+}
+
+#startButton.signX:hover {
+    background-color: var(--theme-color-light);
+}
+
+#startButton.signO:hover {
+    background-color: var(--theme-color2-light);
+}
+
+#startButton:active,
+#nextRoundBtn:active,
+#quitBtn:active,
+#restartBtn:active
+{
+    transform: translateY(2px);
+    transition: 0s;
 }
 
 
