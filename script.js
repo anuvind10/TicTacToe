@@ -64,7 +64,9 @@ const GameControl = (function() {
     const gamePage = document.querySelector('#gamePage');
     const setupPage = document.querySelector('#setupPage');
     const nextRoundPopup = document.querySelector('#nextRound');
-
+    const winResult = document.querySelectorAll('.winResult');
+    const player1Win = document.querySelector('#player1Win');
+    const player2Win = document.querySelector('#player2Win');
 
     var player1Sign;
     var player2Sign;
@@ -75,6 +77,7 @@ const GameControl = (function() {
     var round = 0;
     var winnerFound = false;
     var result;
+    var gameOver = false;
 
 
     signs.forEach(sign => {
@@ -133,8 +136,21 @@ const GameControl = (function() {
                 player2.updateScore();
             }
             round++;
+            
             if (round < 3){
-                setTimeout(toggleNextRoundPopup, 1000, 'win');
+                if (round === 2) {
+                    if ((player1.getScore() === 2 && player2.getScore() === 0) || 
+                        (player2.getScore() === 2) && player1.getScore() === 0) {
+                            gameOver = true;
+                    }
+                }
+
+                if(!gameOver) {
+                    setTimeout(toggleNextRoundPopup, 1000, 'win');
+                }
+                else {
+                    setTimeout(toggleFinalDisplay, 1000, 'win', player1);
+                }
             }
             winnerFound = false;
         } else if (!Gameboard.getBoard().includes('')) {
@@ -159,18 +175,21 @@ const GameControl = (function() {
         }
 
         DisplayController.displayScore(player1.getScore(), player2.getScore(), draw)
-        if(round >= 3) {
-            if (player1.getScore() > player2.getScore()) {
-                setTimeout(toggleFinalDisplay, 1000, player1);
+        
+        if (!gameOver) {
+            if(round >= 3) {
+                if (player1.getScore() > player2.getScore()) {
+                    setTimeout(toggleFinalDisplay, 1000, 'win', player1);
+                }
+                else if (player2.getScore() > player1.getScore()) {
+                    setTimeout(toggleFinalDisplay, 1000, 'win', player2);
+                }
+                else {
+                    setTimeout(toggleFinalDisplay, 1000, 'draw');
+                }
+    
+                return;
             }
-            else if (player2.getScore() > player1.getScore()) {
-                setTimeout(toggleFinalDisplay, 1000, player2);
-            }
-            else {
-                console.log('Its a draw');
-            }
-
-            return;
         }
     }
 
@@ -287,6 +306,14 @@ const GameControl = (function() {
 
     function toggleGamePage() {
         const isGamePageActive = gamePage.classList.contains('active');
+        const name1 = document.createElement('p');
+        const name2 = document.createElement('p');
+
+        name1.innerHTML = player1.getName();
+        name2.innerHTML = player2.getName();
+
+        player1Win.prepend(name1);
+        player2Win.prepend(name2);
 
         if (!isGamePageActive) {
             gamePage.classList.add('active');
@@ -295,6 +322,15 @@ const GameControl = (function() {
         else {
             gamePage.classList.remove('active');
             setupPage.classList.add('active');
+        }
+
+        if (player1.getSign() === 'X') {
+            player1Win.style.backgroundColor = 'var(--theme-color)';
+            player2Win.style.backgroundColor = 'var(--theme-color2)';
+        }
+        else {
+            player1Win.style.backgroundColor = 'var(--theme-color2)';
+            player2Win.style.backgroundColor = 'var(--theme-color)';
         }
 
     }
@@ -402,7 +438,7 @@ const GameControl = (function() {
         return
     }
 
-    function toggleFinalDisplay(winner) {
+    function toggleFinalDisplay(result, winner='none') {
         const finalDisplay = document.querySelector('#finalResult');
         const finalWinner = document.querySelector('#finalWinner');
         if (!finalDisplay.classList.contains('active')) {
@@ -410,15 +446,26 @@ const GameControl = (function() {
             overlay.style.display = 'block';
         }
 
-        finalWinner.innerHTML = winner.getName();
-
-        if (winner.getSign() === 'X') {
-            restartBtn.style.backgroundColor = 'var(--theme-color)';
-            finalWinner.style.color = 'var(--theme-color)';
+        if (result === 'draw') {
+            winResult.forEach(element => {
+                element.style.display = 'none';
+            });
+            finalWinner.innerHTML = 'It\'s a Draw';
         }
         else {
-            restartBtn.style.backgroundColor = 'var(--theme-color2)';
-            finalWinner.style.color = 'var(--theme-color2)';
+            winResult.forEach(element => {
+                element.style.display = 'block';
+            });
+            finalWinner.innerHTML = winner.getName();
+            
+            if (winner.getSign() === 'X') {
+                restartBtn.style.backgroundColor = 'var(--theme-color)';
+                finalWinner.style.color = 'var(--theme-color)';
+            }
+            else {
+                restartBtn.style.backgroundColor = 'var(--theme-color2)';
+                finalWinner.style.color = 'var(--theme-color2)';
+            }
         }
 
     }

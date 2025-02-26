@@ -17,6 +17,7 @@
     --font-color: white;
     --theme-color: #7319af;
     --theme-color2: #198C93;
+    --theme-color3: #a06e11;
     --bg-color-opac: #000000a1;
 }
 
@@ -111,6 +112,7 @@ input {
     border: none;
     border-radius: 5px;
     box-shadow: 5px 5px 5px #000000;
+    background-color: var(--theme-color3);
 }
 
 #startButton.signX {
@@ -141,6 +143,10 @@ input {
     justify-content: center;
     align-items: center;
     box-shadow: 5px 5px 5px #000000;
+}
+
+.result > p {
+    font-weight: bold;
 }
 
 #setupPage,
@@ -253,17 +259,8 @@ label {
     z-index: 5;
 }
 
-#player1Win {
-    background-color: var(--theme-color);
-}
-
-#player2Win {
-    background-color: var(--theme-color2);
-}
-
-
 #draw {
-    background-color: #a7a7a71e;
+    background-color: var(--theme-color3);
 }
 
 #turnDisplay {
