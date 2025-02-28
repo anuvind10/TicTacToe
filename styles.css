@@ -102,10 +102,10 @@ input {
     transition: 0.3s ease-in;
 }
 
-#startButton,
+#startBtn,
 #nextRoundBtn,
-#quitBtn,
-#restartBtn {
+#restartBtn,
+.quitBtn {
     color: white;
     font-weight: bold;
     width: 150px;
@@ -117,12 +117,12 @@ input {
     background-color: var(--theme-color3);
 }
 
-#startButton.signX {
+#startBtn.signX {
     background-color: var(--theme-color);
     transition: 0.3s ease-in;
 }
 
-#startButton.signO {
+#startBtn.signO {
     background-color: var(--theme-color2);
     transition: 0.3s ease-in;
 }
@@ -310,7 +310,8 @@ label {
     max-width: 25px;
 }
 
-#buttons {
+#roundBtns,
+#finalBtns {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -349,18 +350,18 @@ label {
     max-width: 50px;
 }
 
-#startButton.signX:hover {
+#startBtn.signX:hover {
     background-color: var(--theme-color-light);
 }
 
-#startButton.signO:hover {
+#startBtn.signO:hover {
     background-color: var(--theme-color2-light);
 }
 
-#startButton:active,
+#startBtn:active,
 #nextRoundBtn:active,
-#quitBtn:active,
-#restartBtn:active
+#restartBtn:active,
+.quitBtn:active
 {
     transform: translateY(2px);
     transition: 0s;
