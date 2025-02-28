@@ -64,7 +64,7 @@ const DOMCache = (function () {
         nextRoundBtn: document.querySelector('#nextRoundBtn'),
         quitBtn: document.querySelectorAll('.quitBtn'),
         restartBtn: document.querySelector('#restartBtn'),
-        overlay: document.querySelector('#overlay')
+        overlay: document.querySelector('#overlay'),
     }
 
     return {
@@ -143,7 +143,7 @@ const DisplayController = (function() {
         switch (args[0]) {
             // toggles the background color of the window
             case 'background':
-                const body = document.querySelector('#body')
+                const body = document.querySelector('#body');
 
                 if (args[1] === 'X' || args[1] === 'signX') {
                     body.style.backgroundImage = 'linear-gradient(var(--bg-color1), var(--bg-color2))';
@@ -255,7 +255,6 @@ const DisplayController = (function() {
                     player2Win.style.backgroundColor = 'var(--theme-color)';
                 }
                 break;
-
             // toggles the next round page
             case 'nextRound':
                 const nextRoundPopup = DOMCache.get('nextRoundPopup');
@@ -421,6 +420,9 @@ const GameControl = (function() {
     var round = 0;
     var winnerFound = false;
     var gameOver = false;
+    
+    nextRoundBtn.addEventListener('click', startNextRound);
+    restartBtn.addEventListener('click', restartGame);
 
     signs.forEach(sign => {
         sign.addEventListener('click', (event) => {
@@ -439,12 +441,9 @@ const GameControl = (function() {
         })  
     });
 
-    nextRoundBtn.addEventListener('click', startNextRound);
-
     quitBtn.forEach(btn => {
         btn.addEventListener('click', restartGame);
     });
-    restartBtn.addEventListener('click', restartGame);
 
     // initializes the game
     function initGame() {

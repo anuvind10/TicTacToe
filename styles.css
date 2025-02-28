@@ -367,6 +367,22 @@ label {
     transition: 0s;
 }
 
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-bottom: 50px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bg-color4);
+}
+
+#gitLink {
+    text-decoration: none;
+}
 
 @keyframes shake {
     0% {
