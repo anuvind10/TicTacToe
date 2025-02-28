@@ -274,27 +274,31 @@ const DisplayController = (function() {
                 }
 
                 if (args[1] !== 'reset') {
-                    if (currentSign === 'X') {
-                        nextRoundBtn.style.backgroundColor = 'var(--theme-color)';
-                        quitBtn.forEach(btn => {
-                            btn.style.backgroundColor = 'var(--theme-color)';
-                        });
-                    }
-                    else {
-                        nextRoundBtn.style.backgroundColor = 'var(--theme-color2)'
-                        quitBtn.forEach(btn => {
-                            btn.style.backgroundColor = 'var(--theme-color2)'
-                        });
-                    }
-            
                     if(args[1] === 'win') {
                         roundWinner.src = `./images/${currentSign}_icon_filled2.png`;
                         roundWinner.style.display = 'block';
                         resultText.textContent = 'Wins the round!'
+
+                        if (currentSign === 'X') {
+                            nextRoundBtn.style.backgroundColor = 'var(--theme-color)';
+                            quitBtn.forEach(btn => {
+                                btn.style.backgroundColor = 'var(--theme-color)';
+                            });
+                        }
+                        else {
+                            nextRoundBtn.style.backgroundColor = 'var(--theme-color2)'
+                            quitBtn.forEach(btn => {
+                                btn.style.backgroundColor = 'var(--theme-color2)'
+                            });
+                        }
                     }
                     else {
                         roundWinner.style.display = 'none';
                         resultText.textContent = 'it\'s a draw!';
+                        nextRoundBtn.style.backgroundColor = 'var(--theme-color3)';
+                        quitBtn.forEach(btn => {
+                            btn.style.backgroundColor = 'var(--theme-color3)';
+                        });
                     }
                 }
                 break;
