@@ -1,13 +1,9 @@
 // Gameboard object
 const Gameboard = (function() {
-    var board = ['','','','','','','','',''];
+    const board = Array(9).fill('');
 
     function setField(index, sign) {
         board[index] = sign;
-    }
-
-    function getBoard() {
-        return board;
     }
 
     function getField(index) {
@@ -15,28 +11,24 @@ const Gameboard = (function() {
     }
 
     function resetBoard() {
-        for (var i = 0; i < board.length; i++) {
-            board[i] = "";
-        }
+        board.fill('');
     }
 
     return {
         setField,
         resetBoard,
-        getBoard,
+        getBoard: () => [...board],
         getField
     }
 })();
 
 
 // Player Object
-function Player(name, sign, score) {
-    const playerName = name;
-    const playerSign = sign;
-    var playerScore = score;
+function Player(name, sign, score = 0) {
+    let playerScore = score;
 
-    const getName = () => playerName;
-    const getSign = () => playerSign;
+    const getName = () => name;
+    const getSign = () => sign;
     const getScore = () => playerScore;
     const updateScore = () => playerScore++;
 
@@ -68,7 +60,7 @@ const DOMCache = (function () {
     }
 
     return {
-        get: (key => elements[key])
+        get: (key) => elements[key]
     };
 })();
 
@@ -138,6 +130,15 @@ const DisplayController = (function() {
         });
     }
 
+    function toggleClass(element, className, force = null) {
+        if (force === null) {
+            element.classList.toggle(className);
+        }
+        else {
+            element.classList[force ? 'add' : 'remove'](className);
+        }
+    } 
+
     // toggles pages or theme color
     function toggle(...args) {
         switch (args[0]) {
@@ -155,17 +156,17 @@ const DisplayController = (function() {
                 nameInputs.forEach(input => {
                     if(input.classList.contains('valid')) {
                         if (input.classList.contains('signX')) {
-                            input.classList.remove('signX');
+                            toggleClass(input, 'signX', false);
                         }
                         else {
-                            input.classList.remove('signO');
+                            toggleClass(input, 'signO', false);
                         }
                         
                         if (args[1] === 'X' || args[1] === 'signX') {
-                            input.classList.add('signX');
+                            toggleClass(input, 'signX', true);
                         }
                         else {
-                            input.classList.add('signO');
+                            toggleClass(input, 'signO', true);
                         }
                     }            
                 });
@@ -181,29 +182,29 @@ const DisplayController = (function() {
                 if (args[1].id === 'signX') {
                     unselect = document.querySelector('#signO');
                     if(!startGame.classList.contains(args[1].id)) {
-                        startGame.classList.remove('signO');
-                        startGame.classList.add(args[1].id);
+                        toggleClass(startGame, 'signO', false);
+                        toggleClass(startGame, args[1].id, true);
                     }
                 }
                 else {
                     unselect = document.querySelector('#signX');
                     if(!startGame.classList.contains(args[1].id)) {
-                        startGame.classList.remove('signX');
-                        startGame.classList.add(args[1].id);
+                        toggleClass(startGame, 'signX', false);
+                        toggleClass(startGame, args[1].id, true);
                     }
                 }
                 if (!isSelected) {
-                    args[1].classList.add('selected');
+                    toggleClass(args[1], 'selected', true);
                     if (!args[1].classList.contains(args[1].id)) {
-                        args[1].classList.add(args[1].id);
+                        toggleClass(args[1], args[1].id, true);
                     }
                 }
             
                 if (unselect.classList.contains('selected')) {
-                    unselect.classList.remove('selected');
+                    toggleClass(unselect, 'selected', false);
                 }
                 if (unselect.classList.contains(args[1].id)) {
-                    unselect.classList.remove(args[1].id);
+                    toggleClass(unselect, args[1].id, false);
                 }
             
                 toggle('background', args[1].id);
@@ -238,12 +239,12 @@ const DisplayController = (function() {
                 player2Win.prepend(name2);
 
                 if (!isGamePageActive) {
-                    gamePage.classList.add('active');
-                    setupPage.classList.remove('active');
+                    toggleClass(gamePage, 'active', true);
+                    toggleClass(setupPage, 'active', false);
                 }
                 else {
-                    gamePage.classList.remove('active');
-                    setupPage.classList.add('active');
+                    toggleClass(gamePage, 'active', false);
+                    toggleClass(setupPage, 'active', true);
                 }
 
                 if (args[1].getSign() === 'X') {
@@ -264,11 +265,11 @@ const DisplayController = (function() {
                 const isPopupActive = nextRoundPopup.classList.contains('active');
 
                 if(!isPopupActive) {
-                    nextRoundPopup.classList.add('active');
+                    toggleClass(nextRoundPopup, 'active', true);
                     overlay.style.display = 'block';
                 }
                 else {
-                    nextRoundPopup.classList.remove('active');
+                    toggleClass(nextRoundPopup, 'active', false);
                     overlay.style.display = 'none';
                 }
 
@@ -308,23 +309,23 @@ const DisplayController = (function() {
 
                 args[1].classList.remove('shake');
                 if (!args[1].checkValidity()) {
-                    args[1].classList.remove('valid');
-                    args[1].classList.add('invalid');
+                    toggleClass(args[1], 'valid', false);
+                    toggleClass(args[1], 'invalid', true);
                 }
                 else {
-                    args[1].classList.add('valid');
-                    args[1].classList.remove('invalid');
+                    toggleClass(args[1], 'valid', true);
+                    toggleClass(args[1], 'invalid', false);
                 }
 
                 signs.forEach(sign => {
                     if (sign.classList.contains('selected')) {
                         if (sign.id === 'signX' && args[1].classList.contains('signO')) {
-                            args[1].classList.remove('signO');
+                            toggleClass(args[1], 'signO', false);
                         }
                         else if (sign.id === 'signO' && args[1].classList.contains('signX')) {
-                            args[1].classList.remove('signX');
+                            toggleClass(args[1], 'signX', false);
                         }
-                        args[1].classList.add(sign.id);
+                        toggleClass(args[1], sign.id, true);
                     }           
                 });
                 break;
@@ -332,10 +333,10 @@ const DisplayController = (function() {
             // toggles the shake animation
             case 'shake':
                 nameInputs.forEach(input => {
-                    input.classList.remove('shake');
+                    toggleClass(input, 'shake', false);
                     void input.offsetWidth;            
                     if(input.value === '') {
-                        input.classList.add('shake');
+                        toggleClass(input, 'shake', true);
                     }
                 });
                 break;
@@ -347,10 +348,8 @@ const DisplayController = (function() {
                 const finalWinner = document.querySelector('#finalWinner');
                 const winResult = document.querySelectorAll('.winResult');
 
-                if (!finalDisplay.classList.contains('active')) {
-                    finalDisplay.classList.add('active');
-                    overlay.style.display = 'block';
-                }
+                toggleClass(finalDisplay, 'active', true);
+                overlay.style.display = 'block';
 
                 if (args[1] === 'draw') {
                     winResult.forEach(element => {
@@ -544,17 +543,9 @@ const GameControl = (function() {
         
         if (!gameOver) {
             if(round >= 3) {
-                if (player1.getScore() > player2.getScore()) {
-                    setTimeout(DisplayController.toggle, 1000, 'finalDisplay', 'win', player1);
-
-                }
-                else if (player2.getScore() > player1.getScore()) {
-                    setTimeout(DisplayController.toggle, 1000, 'finalDisplay', 'win', playplayer2er1);
-
-                }
-                else {
-                    setTimeout(DisplayController.toggle, 1000, 'finalDisplay', 'draw');
-                }
+                const winner = player1.getScore() > player2.getScore() ? player1: player2.getScore() > player1.getScore() ? player2 : null;
+                
+                setTimeout(DisplayController.toggle, 1000, 'finalDisplay', winner ? 'win' : 'draw', winner);
     
                 return;
             }
@@ -585,8 +576,8 @@ const GameControl = (function() {
 
         player1Sign === 'X' ? player2Sign = 'O' : player2Sign = 'X';
 
-        player1 = new Player(player1Name.value, player1Sign, 0);
-        player2 = new Player(player2Name.value, player2Sign, 0);
+        player1 = new Player(player1Name.value, player1Sign);
+        player2 = new Player(player2Name.value, player2Sign);
 
         return 0;
     }
@@ -632,7 +623,8 @@ const GameControl = (function() {
         }
 
         // check each winning fields combination to find a winner
-        return winningCombo.filter((combination) => combination.includes(index))
+        return winningCombo
+                .filter((combination) => combination.includes(index))
                 .some((possibleCombos) => possibleCombos.every((index) => 
                         Gameboard.getField(index) === currentPlayer.getSign() ? winnerTrigger(possibleCombos) : false )
                     )
@@ -699,6 +691,3 @@ const GameControl = (function() {
     }
 
 })();
-
-
-
